@@ -1900,7 +1900,6 @@ var User =
 function () {
   function User(data) {
     this.data = data;
-    this.events = {};
   }
 
   User.prototype.get = function (propName) {
@@ -1911,31 +1910,24 @@ function () {
     Object.assign(this.data, update);
   };
 
-  User.prototype.on = function (eventName, callback) {
-    var handlers = this.events[eventName] || []; //can be a callback ir undefined
-
-    handlers.push(callback);
-    this.events[eventName] = handlers;
-  };
-
-  User.prototype.trigger = function (eventName) {
-    var handlers = this.events[eventName];
-
-    if (!handlers || handlers.length === 0) {
-      return;
-    }
-
-    handlers.forEach(function (callback) {
-      callback();
-    });
-  };
-
   User.prototype.fetch = function () {
     var _this = this;
 
     axios_1.default.get("http://localhost:3000/users/" + this.get('id')).then(function (response) {
       _this.set(response.data);
     });
+  };
+
+  User.prototype.save = function () {
+    var id = this.get('id');
+
+    if (id) {
+      // put
+      axios_1.default.put("http://localhost:3000/users/" + id, this.data);
+    } else {
+      // post
+      axios_1.default.post("http://localhost:3000/users/", this.data);
+    }
   };
 
   return User;
@@ -1954,10 +1946,20 @@ var User_1 = require("./models/User");
 var user = new User_1.User({
   id: 1
 });
+var newUser = new User_1.User({
+  name: "new user",
+  age: 0
+});
 user.fetch();
 setTimeout(function () {
   console.log(user);
 }, 4000);
+user.set({
+  name: "NEW NAME",
+  age: 9999
+});
+user.save();
+newUser.save();
 },{"./models/User":"src/models/User.ts"}],"../../.npm-global/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -1986,7 +1988,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58948" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49602" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
