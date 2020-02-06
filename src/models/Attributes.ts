@@ -13,5 +13,9 @@ export class Attributes<T> {
         Object.assign(this.data, update);
     }
 
+    getAll(): T {
+        return this.data;
+    }
+
 
 }
