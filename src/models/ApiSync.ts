@@ -4,7 +4,7 @@ interface IHasType{
     id?: number;
 }
 
-export class Sync<T extends IHasType>{
+export class ApiSync<T extends IHasType>{
 
     constructor (public rootUtl: string){};
 
